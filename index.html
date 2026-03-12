@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="no-scroll">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>عائلة مشعل محمد نايف</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+    <div class="family-container">
+        <!-- Header Section -->
+        <header class="main-header">
+            <h1>🏠 عائلة مشعل</h1>
+            <p class="subtitle">أبو مشعل - أم مشعل و الأبناء</p>
+            <div class="star-counter" id="star-counter">⭐ 0 نجوم</div>
+        </header>
+
+        <!-- Family Members Horizontal Scroll Panel -->
+        <section class="info-panel">
+            <div class="family-members">
+                <div class="member-card" data-member="father">
+                    <span class="avatar">👨‍💻</span>
+                    <h3>أبو مشعل</h3>
+                    <p class="role">مهندس برمجيات 💻</p>
+                </div>
+                <div class="member-card distinguished" data-member="mother">
+                    <span class="avatar">👩‍🎓</span>
+                    <h3>أم مشعل</h3>
+                    <p class="role">ماجستير إدارة وتخطيط 🎓</p>
+                    <p class="spec">مدير موارد بشرية (HR)</p>
+                </div>
+                <div class="member-card" data-member="mashal">
+                    <span class="avatar">👨‍✈️</span>
+                    <h3>القبطان مشعل</h3>
+                    <p class="age">طيار المستقبل ✈️</p>
+                </div>
+                <div class="member-card" data-member="mohamed">
+                    <span class="avatar">👨‍🚀</span>
+                    <h3>رائد الفضاء محمد</h3>
+                    <p class="age">مستكشف النجوم 🚀</p>
+                </div>
+                <div class="member-card" data-member="naif">
+                    <span class="avatar">👨‍⚕️</span>
+                    <h3>الدكتور نايف</h3>
+                    <p class="age">طبيب العائلة 🩺</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Home Tab -->
+            <section id="home" class="tab-content active">
+                <div class="welcome-card">
+                    <h2>مرحباً بطلنا الصغير! 🌟</h2>
+                    <div class="welcome-inner">
+                        <p>هذا بيتك الرقمي يا مشعل، هنا يمكننا:</p>
+                        <ul>
+                            <li>نتعلم الرياضيات والحروف</li>
+                            <li>نتابع أوقاتنا اليومية</li>
+                            <li>نسجل المهام لنحصل على نجوم</li>
+                            <li>نحتفظ بصورنا الجميلة</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education Tab -->
+            <section id="education" class="tab-content">
+                <div class="education-header">
+                    <h2>📚 وقت التعلم المرح</h2>
+                </div>
+
+                <div class="lessons-container" id="all-lessons">
+                    <div class="lesson-card" data-subject="math">
+                        <div class="subject-icon">🔢</div>
+                        <h3>الرياضيات</h3>
+                        <p>هيا نعد ونجمع!</p>
+                        <button class="learn-btn" onclick="showLesson('math')">افتح الحساب</button>
+                    </div>
+                    <div class="lesson-card" data-subject="reading">
+                        <div class="subject-icon">📝</div>
+                        <h3>الحروف</h3>
+                        <p>هيا نتعلم الحروف!</p>
+                        <button class="learn-btn" onclick="showLesson('reading')">افتح القراءة</button>
+                    </div>
+                    <div class="lesson-card" data-subject="science">
+                        <div class="subject-icon">🦁</div>
+                        <h3>الحيوانات</h3>
+                        <p>هيا نعرف عالمنا!</p>
+                        <button class="learn-btn" onclick="showLesson('science')">افتح العلوم</button>
+                    </div>
+                    <div class="lesson-card" data-subject="coding">
+                        <div class="subject-icon">💻</div>
+                        <h3>البرمجة</h3>
+                        <p>تعلم لغة المستقبل!</p>
+                        <button class="learn-btn" onclick="showLesson('coding')">هيا نبرمج</button>
+                    </div>
+                    <div class="lesson-card" data-subject="english">
+                        <div class="subject-icon">🇺🇸</div>
+                        <h3>الإنجليزية</h3>
+                        <p>Letters and Words!</p>
+                        <button class="learn-btn" onclick="showLesson('english')">Start English</button>
+                    </div>
+                    <div class="lesson-card" data-subject="islamic">
+                        <div class="subject-icon">🕌</div>
+                        <h3>التربية الإسلامية</h3>
+                        <p>قصص وأذكار وقرآن</p>
+                        <button class="learn-btn" onclick="showLesson('islamic')">ابدأ التعلم</button>
+                    </div>
+                    <div class="lesson-card" data-subject="sports">
+                        <div class="subject-icon">⚽</div>
+                        <h3>تحدي الأبطال</h3>
+                        <p>حركات رياضية قوية!</p>
+                        <button class="learn-btn" onclick="showLesson('sports')">ابدأ التحدي</button>
+                    </div>
+                </div>
+
+                <!-- Math Lesson Component -->
+                <div id="math-lesson" class="lesson-content hidden">
+                    <button class="back-btn" onclick="hideAllLessons()">🔙 عودة</button>
+                    <h3>🔢 لعبة العد السحرية</h3>
+                    <div class="game-container">
+                        <button class="counter-btn" onclick="countDown()">➖</button>
+                        <span id="counter" class="counter">0</span>
+                        <button class="counter-btn" onclick="countUp()">➕</button>
+                    </div>
+                    <div class="math-problems">
+                        <p>تحدي اليوم: 2 + 3 = كم؟</p>
+                        <input type="number" id="answer1" placeholder="؟">
+                        <button class="learn-btn" onclick="checkMathResult(5)">تحقق من إجابتك</button>
+                    </div>
+                </div>
+
+                <!-- Reading Lesson Component -->
+                <div id="reading-lesson" class="lesson-content hidden">
+                    <button class="back-btn" onclick="hideAllLessons()">🔙 عودة</button>
+                    <h3>📝 لعبة الحروف والألوان</h3>
+                    <div class="letter-game">
+                        <div class="game-container">
+                            <span id="letter-display" class="counter">أ</span>
+                        </div>
+                        <input type="text" id="letter-input" placeholder="اكتب الحرف هنا...">
+                        <button class="learn-btn" onclick="checkLetterResult()">هل هو صحيح؟</button>
+                        <div class="alphabet-btns"
+                            style="display:flex; flex-wrap:wrap; gap:5px; margin-top:15px; justify-content:center;">
+                            <button onclick="changeLetter('أ')">أ</button>
+                            <button onclick="changeLetter('ب')">ب</button>
+                            <button onclick="changeLetter('ت')">ت</button>
+                            <button onclick="changeLetter('ث')">ث</button>
+                            <button onclick="changeLetter('ج')">ج</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Science Lesson Component -->
+                <div id="science-lesson" class="lesson-content hidden">
+                    <button class="back-btn" onclick="hideAllLessons()">🔙 عودة</button>
+                    <h3>🐱 حدائق الحيوان</h3>
+                    <div class="animal-game">
+                        <div class="game-container">
+                            <span id="animal-display" class="counter">🦁</span>
+                        </div>
+                        <p>ما اسم هذا الحيوان؟</p>
+                        <input type="text" id="animal-input" placeholder="اكتب اسم الحيوان">
+                        <button class="learn-btn" onclick="checkAnimalResult()">جرب!</button>
+                        <div class="alphabet-btns"
+                            style="display:flex; flex-wrap:wrap; gap:5px; margin-top:15px; justify-content:center;">
+                            <button onclick="changeAnimal('lion')">🦁</button>
+                            <button onclick="changeAnimal('cat')">🐱</button>
+                            <button onclick="changeAnimal('dog')">🐶</button>
+                            <button onclick="changeAnimal('rabbit')">🐰</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coding Lesson Component -->
+                <div id="coding-lesson" class="lesson-content hidden">
+                    <button class="back-btn" onclick="hideAllLessons()">🔙 عودة</button>
+                    <h3>💻 مستوى: <span id="coding-level">1</span></h3>
+                    <p>ساعد الروبوت للوصول إلى النجمة باستعمال الأوامر!</p>
+                    <div class="coding-game">
+                        <div class="game-container" id="coding-grid"
+                            style="display:grid; gap:8px; background:#1e272e; padding:15px; border-radius:15px; width:fit-content; margin:0 auto;">
+                            <!-- Grid items will be managed by JS -->
+                        </div>
+                        <div class="coding-controls"
+                            style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+                            <button class="counter-btn" onclick="moveRobot('up')">🔼</button>
+                            <button class="counter-btn" onclick="moveRobot('down')">🔽</button>
+                            <button class="counter-btn" onclick="moveRobot('right')">▶️</button>
+                            <button class="counter-btn" onclick="moveRobot('left')">◀️</button>
+                        </div>
+                        <button class="learn-btn" onclick="restartCodingGame()"
+                            style="background:var(--accent); color:#000;">إعادة اللعب</button>
+                    </div>
+                </div>
+
+                <!-- English Lesson Component -->
+                <div id="english-lesson" class="lesson-content hidden">
+                    <button class="back-btn" onclick="hideAllLessons()">🔙 عودة</button>
+                    <h3>🇺🇸 Learn English</h3>
+                    <div class="english-game">
+                        <div class="game-container">
+                            <span id="english-display" class="counter">A</span>
+                        </div>
+                        <p>What is this letter?</p>
+                        <input type="text" id="english-input" placeholder="Type letter here...">
+                        <button class="learn-btn" onclick="checkEnglishResult()">Check Answer</button>
+                        <div class="alphabet-btns"
+                            style="display:flex; flex-wrap:wrap; gap:5px; margin-top:15px; justify-content:center;">
+                            <button onclick="changeEnglishLetter('A')">A</button>
+                            <button onclick="changeEnglishLetter('B')">B</button>
+                            <button onclick="changeEnglishLetter('C')">C</button>
+                            <button onclick="changeEnglishLetter('D')">D</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Islamic Lesson Component -->
+                <div id="islamic-lesson" class="lesson-content hidden">
+                    <button class="back-btn" onclick="hideAllLessons()">🔙 عودة</button>
+                    <h3>🕌 التربية الإسلامية</h3>
+                    <div class="islamic-game">
+                        <div class="game-container">
+                            <span id="islamic-display" class="counter">🌙</span>
+                        </div>
+                        <div class="dhikr-box"
+                            style="background:white; padding:15px; border-radius:15px; text-align:center; font-weight:700; color:var(--primary); margin-bottom:15px;">
+                            <p id="dhikr-text">سبحان الله</p>
+                        </div>
+                        <button class="learn-btn" onclick="nextDhikr()">الذكر التالي ✨</button>
+                    </div>
+                </div>
+
+                <!-- Sports Lesson Component -->
+                <div id="sports-lesson" class="lesson-content hidden">
+                    <button class="back-btn" onclick="hideAllLessons()">🔙 عودة</button>
+                    <h3>⚽ تحدي الأبطال الرياضي</h3>
+                    <div class="sports-challenge-container">
+                        <div class="challenge-image-box"
+                            style="background:white; border-radius:30px; padding:20px; box-shadow:var(--shadow); margin-bottom:20px;">
+                            <img id="sports-img" src="assets/jump.png" alt="sports"
+                                style="width:100%; max-width:250px; border-radius:20px;">
+                        </div>
+                        <div class="challenge-text"
+                            style="font-size:1.5em; font-weight:800; color:var(--primary); margin-bottom:20px;">
+                            <p id="sports-task">اقفز 5 مرات في مكانك!</p>
+                        </div>
+                        <button class="learn-btn" onclick="nextSportsChallenge()">التحدي التالي 🔥</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hobbies Tab -->
+            <section id="hobbies" class="tab-content">
+                <h2>✨ هواياتنا المفضلة</h2>
+                <div class="hobbies-grid">
+                    <div class="hobby-card" onclick="revealHobby('father')">
+                        <div class="hobby-icon">❓</div>
+                        <h3>أبو مشعل</h3>
+                        <div class="hobby-reveal hidden" id="hobby-father">
+                            <p>مهندس برمجيات ومبرمج محترف 💻</p>
+                        </div>
+                    </div>
+                    <div class="hobby-card" onclick="revealHobby('mother')">
+                        <div class="hobby-icon">❓</div>
+                        <h3>أم مشعل</h3>
+                        <div class="hobby-reveal hidden" id="hobby-mother">
+                            <p>خبيرة موارد بشرية وإدارة 📚</p>
+                        </div>
+                    </div>
+                    <div class="hobby-card" onclick="revealHobby('mashal')">
+                        <div class="hobby-icon">❓</div>
+                        <h3>مشعل</h3>
+                        <div class="hobby-reveal hidden" id="hobby-mashal">
+                            <p>الطيار البطل المستقبلي ✈️</p>
+                            <img src="assets/pilot.png" class="hobby-img" alt="pilot">
+                        </div>
+                    </div>
+                    <div class="hobby-card" onclick="revealHobby('mohamed')">
+                        <div class="hobby-icon">❓</div>
+                        <h3>محمد</h3>
+                        <div class="hobby-reveal hidden" id="hobby-mohamed">
+                            <p>رائد فضاء يستكشف الكون 🚀</p>
+                            <img src="assets/astronaut.png" class="hobby-img" alt="astronaut">
+                        </div>
+                    </div>
+                    <div class="hobby-card" onclick="revealHobby('naif')">
+                        <div class="hobby-icon">❓</div>
+                        <h3>نايف</h3>
+                        <div class="hobby-reveal hidden" id="hobby-naif">
+                            <p>الدكتور منقذ الأرواح 🩺</p>
+                            <img src="assets/doctor.png" class="hobby-img" alt="doctor">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Schedule Tab -->
+            <section id="schedule" class="tab-content">
+                <h2>⏰ جدولنا الجميل</h2>
+                <div class="schedule-container">
+                    <div class="schedule-item">
+                        <span class="time">06:30</span>
+                        <p>صلاة الفجر وبداية الهمة ☀️</p>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="time">08:00</span>
+                        <p>فطور العائلة الصحي 🥛</p>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="time">10:00</span>
+                        <p>وقت النشاط والتعلم ✏️</p>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="time">14:00</span>
+                        <p>وقت اللعب مع الأخوة 🎮</p>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="time">16:00</span>
+                        <p>صلاة العصر ودراسة خفيفة 🌙</p>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="time">19:00</span>
+                        <p>عشاء العائلة والهدوء 🍲</p>
+                    </div>
+                    <div class="schedule-item">
+                        <span class="time">21:00</span>
+                        <p>وقت النوم والأحلام السعيدة 😴</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tasks Tab -->
+            <section id="tasks" class="tab-content">
+                <h2>✅ مهامنا اليومية</h2>
+                <div class="tasks-container">
+                    <input type="text" id="task-input" placeholder="مهمة جديدة يا بطل..."
+                        onkeypress="handleEnter(event)">
+                    <button onclick="addTask()" class="add-btn">+ إضافة مهمة</button>
+                    <ul id="tasks-list" class="tasks-list"></ul>
+                </div>
+            </section>
+
+            <!-- Game Tab -->
+            <section id="game" class="tab-content">
+                <h2>🚀 صائد النجوم الفضائي</h2>
+                <div class="game-score-board">
+                    <span>النتيجة: <span id="game-score">0</span></span>
+                    <span>الوقت: <span id="game-time">30</span></span>
+                </div>
+                <div class="game-box" id="game-canvas">
+                    <button class="game-start-btn" id="start-game-btn" onclick="startGame()">ابدأ المغامرة!</button>
+                </div>
+                <p style="text-align:center; margin-top:10px; font-size:0.9em;">اضغط على النجوم الطائرة لجمع النقاط!</p>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="home">
+                <span class="icon">🏠</span>
+                <span>الرئيسية</span>
+            </button>
+            <button class="tab-btn" data-tab="education">
+                <span class="icon">📖</span>
+                <span>التعلم</span>
+            </button>
+            <button class="tab-btn" data-tab="hobbies">
+                <span class="icon">✨</span>
+                <span>الهوايات</span>
+            </button>
+            <button class="tab-btn" data-tab="schedule">
+                <span class="icon">⏰</span>
+                <span>الجدول</span>
+            </button>
+            <button class="tab-btn" data-tab="tasks">
+                <span class="icon">✅</span>
+                <span>المهام</span>
+            </button>
+            <button class="tab-btn" data-tab="game">
+                <span class="icon">🚀</span>
+                <span>الألعاب</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Feedback Message -->
+    <div id="feedback-msg" class="feedback-notification hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
