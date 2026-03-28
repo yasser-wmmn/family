@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <div class="stars"></div>
     <div class="family-container">
         <!-- Header Section -->
         <header class="main-header">
@@ -180,23 +181,55 @@
 
                 <!-- Coding Lesson Component -->
                 <div id="coding-lesson" class="lesson-content hidden">
-                    <button class="back-btn" onclick="hideAllLessons()">🔙 عودة</button>
-                    <h3>💻 مستوى: <span id="coding-level">1</span></h3>
-                    <p>ساعد الروبوت للوصول إلى النجمة باستعمال الأوامر!</p>
+                    <button class="back-btn" onclick="hideAllLessons()">🔙 عودة للدروس</button>
+                    <div class="coding-header" style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>💻 مستوى: <span id="coding-level">1</span> <span id="coding-stage" style="font-size:0.5em; background:var(--accent); color:#000; padding:4px 10px; border-radius:15px; vertical-align:middle;">التحكم المباشر</span></h3>
+                        <button class="learn-btn" onclick="restartCodingGame()" style="width:auto; padding:8px 15px; font-size:0.9em; margin:0;">إعادة</button>
+                    </div>
+                    <p id="coding-instruction" style="margin:10px 0; color:var(--accent); font-weight:800; text-align:center;">ساعد الروبوت للوصول إلى النجمة!</p>
+                    
                     <div class="coding-game">
-                        <div class="game-container" id="coding-grid"
-                            style="display:grid; gap:8px; background:#1e272e; padding:15px; border-radius:15px; width:fit-content; margin:0 auto;">
+                        <div class="game-container" id="coding-grid" style="display:grid; gap:8px; background:#1e272e; padding:15px; border-radius:15px; width:fit-content; margin:0 auto; box-shadow:inset 0 0 20px rgba(0,0,0,0.8); border:3px solid var(--accent);">
                             <!-- Grid items will be managed by JS -->
                         </div>
-                        <div class="coding-controls"
-                            style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
-                            <button class="counter-btn" onclick="moveRobot('up')">🔼</button>
-                            <button class="counter-btn" onclick="moveRobot('down')">🔽</button>
-                            <button class="counter-btn" onclick="moveRobot('right')">▶️</button>
-                            <button class="counter-btn" onclick="moveRobot('left')">◀️</button>
+                        
+                        <!-- Panel for Levels 6-15 (Blocks) -->
+                        <div id="coding-panel" class="hidden" style="background:rgba(0,0,0,0.3); border-radius:15px; padding:15px; margin:20px 0; border:1px solid rgba(255,255,255,0.1);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <span style="font-weight:bold; color:#fff;">تسلسل الأوامر:</span>
+                                <button class="back-btn" onclick="clearCode()" style="margin:0; padding:5px 15px; font-size:0.8em; background:#ff6b6b; border:none; color:white;">مسح 🗑️</button>
+                            </div>
+                            <div id="coding-queue" style="display:flex; gap:8px; flex-wrap:wrap; min-height:55px; background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; align-items:center;">
+                                <!-- Commands will appear here -->
+                            </div>
                         </div>
-                        <button class="learn-btn" onclick="restartCodingGame()"
-                            style="background:var(--accent); color:#000;">إعادة اللعب</button>
+
+                        <!-- Panel for Levels 16+ (Text Coding) -->
+                         <div id="text-coding-panel" class="hidden" style="background:#0f111a; border-radius:15px; padding:15px; margin:20px 0; border:2px solid var(--primary); font-family:monospace; color:#1dd1a1; text-align:left; direction:ltr;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-family:var(--font-family);">
+                                <span style="font-weight:bold; color:#feca57;">📝 محرر الأكواد:</span>
+                                <button class="back-btn" onclick="clearCode()" style="margin:0; padding:5px 15px; font-size:0.8em; background:#ff6b6b; border:none; color:white;">مسح</button>
+                            </div>
+                            <div id="text-coding-queue" style="min-height:60px; font-size:1.2em; line-height:1.5;"></div>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="coding-controls" id="coding-controls-arrows" style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+                            <button class="counter-btn" onclick="addCommand('up')">🔼</button>
+                            <button class="counter-btn" onclick="addCommand('down')">🔽</button>
+                            <button class="counter-btn" onclick="addCommand('right')">▶️</button>
+                            <button class="counter-btn" onclick="addCommand('left')">◀️</button>
+                        </div>
+
+                        <!-- Text Buttons for Level 16+ -->
+                        <div class="coding-controls hidden" id="coding-controls-text" style="display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap; direction:ltr;">
+                            <button class="add-btn" onclick="addCommand('up')" style="width:auto; padding:10px 15px; margin:0;">up()</button>
+                            <button class="add-btn" onclick="addCommand('down')" style="width:auto; padding:10px 15px; margin:0;">down()</button>
+                            <button class="add-btn" onclick="addCommand('right')" style="width:auto; padding:10px 15px; margin:0;">right()</button>
+                            <button class="add-btn" onclick="addCommand('left')" style="width:auto; padding:10px 15px; margin:0;">left()</button>
+                        </div>
+
+                        <button id="run-code-btn" class="learn-btn hidden" onclick="runCode()" style="margin-top:20px; font-size:1.3em; background:linear-gradient(to bottom, #f39c12, #d35400); box-shadow:0 6px 0 #e67e22, 0 15px 20px rgba(0,0,0,0.4);">تشغيل الكود ▶️</button>
                     </div>
                 </div>
 
@@ -229,8 +262,7 @@
                         <div class="game-container">
                             <span id="islamic-display" class="counter">🌙</span>
                         </div>
-                        <div class="dhikr-box"
-                            style="background:white; padding:15px; border-radius:15px; text-align:center; font-weight:700; color:var(--primary); margin-bottom:15px;">
+                        <div class="dhikr-box">
                             <p id="dhikr-text">سبحان الله</p>
                         </div>
                         <button class="learn-btn" onclick="nextDhikr()">الذكر التالي ✨</button>
@@ -242,13 +274,11 @@
                     <button class="back-btn" onclick="hideAllLessons()">🔙 عودة</button>
                     <h3>⚽ تحدي الأبطال الرياضي</h3>
                     <div class="sports-challenge-container">
-                        <div class="challenge-image-box"
-                            style="background:white; border-radius:30px; padding:20px; box-shadow:var(--shadow); margin-bottom:20px;">
+                        <div class="challenge-image-box">
                             <img id="sports-img" src="assets/jump.png" alt="sports"
                                 style="width:100%; max-width:250px; border-radius:20px;">
                         </div>
-                        <div class="challenge-text"
-                            style="font-size:1.5em; font-weight:800; color:var(--primary); margin-bottom:20px;">
+                        <div class="challenge-text">
                             <p id="sports-task">اقفز 5 مرات في مكانك!</p>
                         </div>
                         <button class="learn-btn" onclick="nextSportsChallenge()">التحدي التالي 🔥</button>

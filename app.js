@@ -60,46 +60,72 @@ function hideAllLessons() {
     resetCodingGame();
 }
 
-// لعبة البرمجة 💻 المطورة
+// لعبة البرمجة 💻 المطورة (20 مستويات)
 let robotPos = { x: 0, y: 0 };
 let goalPos = { x: 2, y: 2 };
 let codingLevel = 1;
 let gridSize = 3;
+let commandQueue = [];
+let isExecuting = false;
 
 function initializeCodingGame() {
     codingLevel = 1;
-    gridSize = 3;
+    commandQueue = [];
+    isExecuting = false;
     resetLevel();
 }
 
 function updateCodingGrid() {
     const grid = document.getElementById('coding-grid');
     const levelDisplay = document.getElementById('coding-level');
+    const stageDisplay = document.getElementById('coding-stage');
+    
     if (!grid) return;
+
+    // Determine Stage
+    let stageText = "التحكم المباشر 🎮";
+    if (codingLevel >= 6 && codingLevel <= 15) stageText = "بناء التسلسل 🧩";
+    if (codingLevel >= 16) stageText = "المبرمج المحترف 💻";
+    
+    if (levelDisplay) levelDisplay.innerText = codingLevel;
+    if (stageDisplay) stageDisplay.innerText = stageText;
+
+    // Adjust grid size
+    gridSize = 3;
+    if(codingLevel > 5) gridSize = 4;
+    if(codingLevel > 10) gridSize = 5;
+    if(codingLevel > 15) gridSize = 6;
 
     grid.innerHTML = '';
     grid.style.gridTemplateColumns = `repeat(${gridSize}, 60px)`;
-    if (levelDisplay) levelDisplay.innerText = codingLevel;
+    
+    // UI Panel handling
+    document.getElementById('coding-panel').classList.toggle('hidden', codingLevel < 6 || codingLevel >= 16);
+    document.getElementById('text-coding-panel').classList.toggle('hidden', codingLevel < 16);
+    document.getElementById('coding-controls-arrows').classList.toggle('hidden', codingLevel >= 16);
+    document.getElementById('coding-controls-text').classList.toggle('hidden', codingLevel < 16);
+    document.getElementById('run-code-btn').classList.toggle('hidden', codingLevel < 6);
 
-    // عوائق عشوائية للمستويات الصعبة (Level 3+)
+    // Obstacles
     if (!window.codingObstacles || window.lastLevel !== codingLevel) {
         window.codingObstacles = [];
         window.lastLevel = codingLevel;
-        if (codingLevel >= 3) {
-            for (let i = 0; i < codingLevel - 1; i++) {
-                let ob;
-                do {
-                    ob = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) };
-                } while ((ob.x === robotPos.x && ob.y === robotPos.y) || (ob.x === goalPos.x && ob.y === goalPos.y));
-                window.codingObstacles.push(ob);
-            }
+        let numObstacles = Math.floor((codingLevel - 1) / 3);
+        for (let i = 0; i < numObstacles; i++) {
+            let ob;
+            let attempts = 0;
+            do {
+                ob = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) };
+                attempts++;
+            } while (attempts < 20 && ((ob.x === robotPos.x && ob.y === robotPos.y) || (ob.x === goalPos.x && ob.y === goalPos.y) || window.codingObstacles.some(o => o.x === ob.x && o.y === ob.y)));
+            window.codingObstacles.push(ob);
         }
     }
 
     for (let y = 0; y < gridSize; y++) {
         for (let x = 0; x < gridSize; x++) {
             const cell = document.createElement('div');
-            cell.style.cssText = `width:60px; height:60px; display:flex; align-items:center; justify-content:center; font-size:2em; background:#2f3542; border-radius:10px;`;
+            cell.style.cssText = `width:60px; height:60px; display:flex; align-items:center; justify-content:center; font-size:2em; background:#2f3542; border-radius:10px; transition:all 0.3s;`;
 
             const obstacle = window.codingObstacles.find(o => o.x === x && o.y === y);
 
@@ -107,20 +133,65 @@ function updateCodingGrid() {
                 cell.innerText = '🤖';
                 cell.style.background = 'var(--primary)';
                 cell.style.boxShadow = '0 0 15px var(--primary)';
+                cell.style.transform = 'scale(1.1)';
             } else if (x === goalPos.x && y === goalPos.y) {
                 cell.innerText = '⭐';
                 cell.style.background = 'var(--accent)';
+                cell.style.animation = 'pulse 1.5s infinite';
             } else if (obstacle) {
                 cell.innerText = '🧱';
                 cell.style.background = '#3a3a3c';
             }
-
             grid.appendChild(cell);
         }
     }
 }
 
-function moveRobot(direction) {
+const dirSymbols = { 'up': '🔼', 'down': '🔽', 'right': '▶️', 'left': '◀️' };
+const dirText = { 'up': 'up()', 'down': 'down()', 'right': 'right()', 'left': 'left()' };
+
+function updateQueueDisplay() {
+    const queueDiv = document.getElementById('coding-queue');
+    const textQueueDiv = document.getElementById('text-coding-queue');
+    
+    if (codingLevel >= 6 && codingLevel <= 15) {
+        queueDiv.innerHTML = '';
+        commandQueue.forEach(cmd => {
+            const span = document.createElement('span');
+            span.innerText = dirSymbols[cmd];
+            span.style.cssText = 'background:var(--secondary); padding:5px; border-radius:8px; display:inline-block; animation:zoomIn 0.2s;';
+            queueDiv.appendChild(span);
+        });
+    } else if (codingLevel >= 16) {
+        textQueueDiv.innerHTML = commandQueue.map((cmd, i) => `${i+1}. <span style="color:var(--accent)">${dirText[cmd]}</span>;`).join('<br>');
+    }
+}
+
+function clearCode() {
+    if(isExecuting) return;
+    commandQueue = [];
+    updateQueueDisplay();
+}
+
+function addCommand(cmd) {
+    if(isExecuting) return;
+    
+    if (codingLevel < 6) {
+        // Direct control
+        executeCommand(cmd);
+        checkWinCondition();
+    } else {
+        // Queue command
+        if(commandQueue.length < 20) {
+            commandQueue.push(cmd);
+            updateQueueDisplay();
+        } else {
+            showFeedback('الذاكرة ممتلئة! أقصى عدد للأوامر هو 20', 'fail');
+        }
+    }
+}
+
+function executeCommand(direction) {
     let nextPos = { ...robotPos };
     switch (direction) {
         case 'up': if (nextPos.y > 0) nextPos.y--; break;
@@ -132,56 +203,111 @@ function moveRobot(direction) {
     const isObstacle = window.codingObstacles.some(o => o.x === nextPos.x && o.y === nextPos.y);
     if (!isObstacle) {
         robotPos = nextPos;
+        updateCodingGrid();
+        return true;
     } else {
         showFeedback('انتبه! يوجد عائق 🧱', 'fail');
-        return;
+        return false;
     }
+}
 
-    updateCodingGrid();
-
-    // التحقق من الفوز
+function checkWinCondition() {
     if (robotPos.x === goalPos.x && robotPos.y === goalPos.y) {
-        if (codingLevel < 5) {
+        if (codingLevel < 20) {
             celebrateSuccess(`رائع! أكملت المستوى ${codingLevel} 🤖✨`);
             setTimeout(nextLevel, 1500);
         } else {
-            celebrateSuccess('أنت مبرمج عبقري! أنهيت كل المستويات 🏆💻');
+            celebrateSuccess('أنت مبرمج خارق! أنهيت كل مستويات اللعبة 🏆💻🚀');
             setTimeout(restartCodingGame, 3000);
         }
+        return true;
     }
+    return false;
+}
+
+function runCode() {
+    if(isExecuting || commandQueue.length === 0) return;
+    isExecuting = true;
+    
+    // Save start position in case of failure
+    let startPos = {...robotPos};
+    let step = 0;
+
+    function nextStep() {
+        if (step < commandQueue.length) {
+            let success = executeCommand(commandQueue[step]);
+            if (!success) {
+                // Hit obstacle, stop execution and reset
+                showFeedback('اصطدام! حاول كتابة كود بديل 🔄', 'fail');
+                setTimeout(() => {
+                    robotPos = startPos;
+                    updateCodingGrid();
+                    isExecuting = false;
+                }, 1000);
+                return;
+            }
+            if(checkWinCondition()) {
+                isExecuting = false;
+                commandQueue = []; // clear code on win
+                return; // Won!
+            }
+            step++;
+            setTimeout(nextStep, 500); // 500ms delay between steps
+        } else {
+            // Reached end of code without winning
+            showFeedback('لم تصل للهدف! راجع الأوامر وحاول مجدداً 🤔', 'fail');
+            setTimeout(() => {
+                robotPos = startPos;
+                updateCodingGrid();
+                isExecuting = false;
+            }, 1000);
+        }
+    }
+    
+    nextStep();
 }
 
 function nextLevel() {
     codingLevel++;
-    // زيادة حجم الشبكة كل مستويين لإضافة الصعوبة
-    if (codingLevel > 3) gridSize = 4;
-    if (codingLevel > 5) gridSize = 5;
-
     resetLevel();
 }
 
 function resetLevel() {
     robotPos = { x: 0, y: 0 };
-    // وضع الهدف في مكان عشوائي بعيد عن الروبوت
-    do {
-        goalPos = {
-            x: Math.floor(Math.random() * gridSize),
-            y: Math.floor(Math.random() * gridSize)
-        };
-    } while (goalPos.x === 0 && goalPos.y === 0);
+    commandQueue = [];
+    isExecuting = false;
+    
+    // Update grid size before checking goal pos
+    gridSize = 3;
+    if(codingLevel > 5) gridSize = 4;
+    if(codingLevel > 10) gridSize = 5;
+    if(codingLevel > 15) gridSize = 6;
+    
+    // Goal at opposite end for advanced levels
+    if(codingLevel >= 6) {
+        goalPos = { x: gridSize - 1, y: gridSize - 1 };
+    } else {
+        do {
+            goalPos = {
+                x: Math.floor(Math.random() * gridSize),
+                y: Math.floor(Math.random() * gridSize)
+            };
+        } while (goalPos.x === 0 && goalPos.y === 0);
+    }
 
     updateCodingGrid();
+    updateQueueDisplay();
 }
 
 function restartCodingGame() {
     codingLevel = 1;
-    gridSize = 3;
     resetLevel();
 }
 
 function resetCodingGame() {
-    // يستخدم عند إغلاق التبويب فقط
     robotPos = { x: 0, y: 0 };
+    commandQueue = [];
+    isExecuting = false;    
 }
 
 // لعبة الإنجليزية 🇺🇸
